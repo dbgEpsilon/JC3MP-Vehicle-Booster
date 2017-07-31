@@ -1,7 +1,7 @@
 {
-  "boostKeyID": 78,
-  "invincibleVehicle": false,
+  "boostKeyID": 81,
+  "invincibleVehicle": true,
   "boostYaxis": true,
   "boostMultiply": 4,
-  "boostSecure": true
+  "boostSecure": false
 }
