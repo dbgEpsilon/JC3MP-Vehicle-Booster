@@ -41,10 +41,24 @@ jcmp.events.AddRemoteCallable("getBoostKey", (player) => {
     jcmp.events.CallRemote("sendBoostKey", player, boostKey);
 });
 
+/*
+*BoostVehicle method copied from Shad0wlife's comment here:
+*https://community.nanos.io/index.php?/topic/531-server-package-vehicle-boost/&do=findComment&comment=7192
+*/
 function BoostVehicle(v) {
-    v.linearVelocity = new Vector3f(v.linearVelocity.x * multiply,
-                                    boostY ? v.linearVelocity.y * multiply : v.linearVelocity.y,
-                                    v.linearVelocity.z * multiply);
+    let maxSpeed = Math.pow(2, 53); //Max safe integer
+	//create vector in direction of movement with length 1
+	let vNormed = new Vector3f(	v.linearVelocity.x / v.linearVelocity.length, 
+								boostY ? v.linearVelocity.y / v.linearVelocity.length : 0,
+								v.linearVelocity.z / v.linearVelocity.length);
+	//create new movement vector
+	let vNew = new Vector3f(v.linearVelocity.x + vNormed.x * multiply,
+							v.linearVelocity.y + vNormed.y * multiply,
+							v.linearVelocity.z + vNormed.z * multiply);
+	//check if vector length is in maxSpeed range to avoid overflow/loss of accuracy
+	if(vNew.length <= maxSpeed){
+		v.linearVelocity = vNew;	//if new speed is valid, set it.
+	}
 }
 
 function AngleHorizontal(vec3) {
